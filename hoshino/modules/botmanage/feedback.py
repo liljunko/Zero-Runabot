@@ -5,7 +5,7 @@ from hoshino.util import DailyNumberLimiter
 
 sv = Service('_feedback_', manage_priv=priv.SUPERUSER, help_='[来杯咖啡] 后接反馈内容 联系维护组')
 
-_max = 1
+_max = 5
 lmt = DailyNumberLimiter(_max)
 EXCEED_NOTICE = f'您今天已经喝过{_max}杯了，请明早5点后再来！'
 
