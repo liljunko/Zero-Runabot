@@ -11,8 +11,8 @@ is_1a2b_start = False
 
 @sv.on_rex(r'^1[Aa]2[Bb]$|^[0-9]{4}')
 async def hello(bot, ev):
-    start = start_1a2b.match(ev.message)
-    guess = guess_1a2b.match(ev.message)
+    start = start_1a2b.match(ev.message.extract_plain_text())
+    guess = guess_1a2b.match(ev.message.extract_plain_text())
     if start:
         await bot.send(ev,'match 1a2b')
     if guess:
