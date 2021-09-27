@@ -14,9 +14,9 @@ data_dir = path.join(path.dirname(__file__), 'data')
 
 @sv.on_message('group')
 async def creep(bot: HoshinoBot, ev: CQEvent):
-    match = re.match(r'(?:(?:rua)|(?:Rua)|搓)\[CQ:at,qq=(\d+?)\]', ev.message.extract_plain_text())
+    match = re.match(r'(?:(?:rua)|(?:Rua)|搓)\[CQ:at,qq=(\d+?)\]', ev.message.extract_plain_text().strip())
     if not match:
-        match = re.match(r'\[CQ:at,qq=(.+?)\] (?:(?:rua)|(?:Rua)|搓)', ev.message.extract_plain_text())
+        match = re.match(r'\[CQ:at,qq=(.+?)\] (?:(?:rua)|(?:Rua)|搓)', ev.message.extract_plain_text().strip())
     if not match:
         return
     creep_id = match.group(1)
