@@ -1,63 +1,76 @@
 import re
 import random
 
+from pytz import country_names
+
 from hoshino import Service
 from hoshino.typing import CQEvent
 
 sv = Service('1a2b')
 
 start_1a2b = re.compile(r'^1[Aa]2[Bb]$')
-guess_1a2b = re.compile(r'^[0-9][0-9][0-9][0-9]$')
+guess_1a2b = re.compile(r'^[0-9]{4}$')
 is_1a2b_start = False
+answer = ""
+guess_count = 0   # 计数器
 
 # TODO: answer generator
 def ans_gener():
-    answer = random.sample(range(10), 4)
-    return answer
+    ans = ""
+    tmp = random.sample(range(10), 4)
+    for a in tmp:
+        ans += str(a)
+    return ans
 
 # TODO: repeated judge
 def have_repeat(guess):
     hash_set = dict()
-    guess_list = list(guess)
-    for i in range(4):
-        if guess_list[i] in hash_set:
+    # guess_list = list(guess)
+    for ch in guess:
+        if ch in hash_set:
             return True
         else:
-            hash_set[guess_list[i]] = None
+            hash_set[ch] = None
     return False
 
 # TODO: game judge
-def hint(answer, guess):
-    answer_list = list(answer)
-    guess_list = list(guess)
-    correct = sum([answer_list[i] == guess_list[i] for i in range(4)])
-    misplaced = sum([i in guess_list for i in guess_list]) - correct
+def judge(answer, guess):
+    # answer_list = list(answer)
+    # guess_list = list(guess)
+    correct = sum([answer[i] == guess[i] for i in range(4)])
+    misplaced = sum([i in answer for i in guess]) - correct
     return correct, misplaced
 
 
-@sv.on_rex(r'^1[Aa]2[Bb]$|^[0-9][0-9][0-9][0-9]$')
+@sv.on_rex(r'^1[Aa]2[Bb]$|^[0-9]{4}$')
 async def hello(bot, ev):
     start = start_1a2b.match(ev.message.extract_plain_text())
     guess = guess_1a2b.match(ev.message.extract_plain_text())
-    global is_1a2b_start
+    global is_1a2b_start, answer, guess_count
     if start:
         if is_1a2b_start:
             await bot.send(ev, '1A2B已经开始，请等待游戏结束')
         else:
             answer = ans_gener()
+            guess_count = 0
             is_1a2b_start = True
-            await bot.send(ev, '1A2B游戏开始啦！发送你要猜的四位数字，开始游戏吧~')
+            await bot.send(ev, '[CQ:face,id=74]1A2B游戏开始啦！发送你要猜的四位数字，开始游戏吧~')
     elif guess:
+        # await bot.send(ev, answer)
         if not is_1a2b_start:
             return
-        if have_repeat(guess):
+        player_guess = guess.group(0)
+        if have_repeat(player_guess):
             return
-        # TODO: game judge
-        if guess == answer:
-            await bot.send(ev, '恭喜玩家猜中了正确答案！')
+        correct, misplaced = judge(answer, player_guess)
+        if correct == 4:
             is_1a2b_start = False
+            hint = '[CQ:face,id=144]恭喜[CQ:at,qq=' + str(ev.user_id) + ']猜中了正确答案：' + answer + '[CQ:face,id=144]'
+            await bot.send(ev, hint)
         else:
-            await bot.send(ev, '_A_B')
-
-    # if is_1a2b_start:
-    #     await bot.send(ev,'echo: 1a2b test')
+            guess_count += 1
+            hint ='(' + str(guess_count) + ') Guess: '+ player_guess +' —— ' \
+                + str(correct) + 'A' + str(misplaced) + 'B'
+            await bot.send(ev, hint)
+    else:
+        return
