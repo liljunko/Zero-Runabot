@@ -9,12 +9,13 @@ sv = Service('1a2b')
 start_1a2b = re.compile(r'^1[Aa]2[Bb]$')
 guess_1a2b = re.compile(r'^[0-9]{4}')
 is_1a2b_start = False
-answer = '5862'
 
 # TODO: answer generator
 def ans_gener():
     answer = random.sample(range, 4)
     return answer
+
+
 
 # TODO: game judge
 def hint(answer, guess):
