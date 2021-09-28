@@ -10,7 +10,7 @@ guess_1a2b = re.compile(r'^[0-9]{4}')
 is_1a2b_start = False
 answer = 1234
 
-@sv.on_rex(r'^1[Aa]2[Bb]$|^[0-9]{4}')
+@sv.on_rex(r'^1[Aa]2[Bb]$|^[0-9][0-9][0-9][0-9]$')
 async def hello(bot, ev):
     start = start_1a2b.match(ev.message.extract_plain_text())
     guess = guess_1a2b.match(ev.message.extract_plain_text())
@@ -23,6 +23,8 @@ async def hello(bot, ev):
             is_1a2b_start = True
             await bot.send(ev, '1A2B游戏开始啦！发送你要猜的四位数字，开始游戏吧~')
     elif guess:
+        if not is_1a2b_start:
+            return
         if guess == answer:
             await bot.send(ev, '恭喜_____中了正确答案：1234！')
             is_1a2b_start = False
