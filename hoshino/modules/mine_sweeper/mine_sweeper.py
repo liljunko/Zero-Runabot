@@ -5,7 +5,7 @@ import asyncio
 
 from  PIL  import   Image, ImageFont, ImageDraw
 from hoshino.typing import CQEvent
-from hoshino import R, Service, priv, log
+from hoshino import R, Service, priv, log, util
 
 FILE_PATH = os.path.dirname(__file__)
 
@@ -334,6 +334,7 @@ async def mine_sweeper(bot, ev):
 		img.save(image.path)
 		msg = []
 		if ms.end_flag == LOSE :
+			await util.silence(ev, 60)
 			msg.append(f"很可惜，您踩到了地雷，游戏结束。\n最终结果：\n{image.cqcode}")
 		elif ms.end_flag == WIN:
 			msg.append(f"恭喜，你已成功找出所有地雷！\n最终结果：\n{image.cqcode}")
