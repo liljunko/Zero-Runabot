@@ -14,7 +14,6 @@ is_1a2b_start = False
 answer = ""
 guess_count = 0   # 计数器
 
-# TODO: answer generator
 def ans_gener():
     ans = ""
     tmp = random.sample(range(10), 4)
@@ -22,7 +21,6 @@ def ans_gener():
         ans += str(a)
     return ans
 
-# TODO: repeated judge
 def have_repeat(guess):
     hash_set = dict()
     # guess_list = list(guess)
@@ -33,7 +31,6 @@ def have_repeat(guess):
             hash_set[ch] = None
     return False
 
-# TODO: game judge
 def judge(answer, guess):
     # answer_list = list(answer)
     # guess_list = list(guess)
