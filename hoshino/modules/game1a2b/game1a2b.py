@@ -47,11 +47,13 @@ async def hello(bot, ev):
     if start:
         if is_1a2b_start:
             await bot.send(ev, '1A2B已经开始，请等待游戏结束')
+            return
         else:
             answer = ans_gener()
             guess_count = 0
             is_1a2b_start = True
             await bot.send(ev, '[CQ:face,id=74]1A2B游戏开始啦！发送你要猜的四位数字，开始游戏吧~')
+            return
     elif guess:
         # await bot.send(ev, answer)
         if not is_1a2b_start:
@@ -64,10 +66,12 @@ async def hello(bot, ev):
             is_1a2b_start = False
             hint = '[CQ:face,id=144]恭喜[CQ:at,qq=' + str(ev.user_id) + ']猜中了正确答案：' + answer + '[CQ:face,id=144]'
             await bot.send(ev, hint)
+            return
         else:
             guess_count += 1
             hint ='(' + str(guess_count) + ') Guess: '+ player_guess +' —— ' \
                 + str(correct) + 'A' + str(misplaced) + 'B'
             await bot.send(ev, hint)
+            return
     else:
         return
