@@ -16,9 +16,9 @@ except:
 
 
 sv_help = '''
-[星乃来发十连] 转蛋模拟
-[星乃来发单抽] 转蛋模拟
-[星乃来一井] 4w5钻！
+[runa来发十连] 转蛋模拟
+[runa来发单抽] 转蛋模拟
+[runa来一井] 4w5钻！
 [查看卡池] 模拟卡池&出率
 [切换卡池] 更换模拟卡池
 '''.strip()
@@ -110,7 +110,7 @@ async def gacha_1(bot, ev: CQEvent):
 
     res = f'{chara.icon.cqcode} {chara.name} {"★"*chara.star}'
 
-    await silence(ev, silence_time)
+    # await silence(ev, silence_time)
     await bot.send(ev, f'素敵な仲間が増えますよ！\n{res}', at_sender=True)
 
 
@@ -144,7 +144,7 @@ async def gacha_10(bot, ev: CQEvent):
     if hiishi >= SUPER_LUCKY_LINE:
         await bot.send(ev, '恭喜海豹！おめでとうございます！')
     await bot.send(ev, f'素敵な仲間が増えますよ！\n{res}\n', at_sender=True)
-    await silence(ev, silence_time)
+    # await silence(ev, silence_time)
 
 
 @sv.on_prefix(gacha_300_aliases, only_to_me=True)
@@ -208,7 +208,7 @@ async def gacha_300(bot, ev: CQEvent):
 
     await bot.send(ev, '\n'.join(msg), at_sender=True)
     silence_time = (100*up + 50*(up+s3) + 10*s2 + s1) * 1
-    await silence(ev, silence_time)
+    # await silence(ev, silence_time)
 
 
 @sv.on_prefix('氪金')
