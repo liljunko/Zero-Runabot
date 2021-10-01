@@ -33,9 +33,9 @@ def bomb_init():
     _max = 100
 
     init_hint = '【心跳~禁言数字炸弹】游戏开始\n'\
-              + '====================\n'\
+              + '===================\n'\
               + 'Bomb已生成~【1】—>【100】\n'\
-              + '====================\n'\
+              + '===================\n'\
               + '首先由[CQ:at,qq=' + str(player_list[0]) + ']猜数'
 
     return init_hint
@@ -104,18 +104,18 @@ async def bomb_join(bot, ev):
         else:
             # global player_list
             player_list.append(ev.user_id)
-            hint = ' Bomb报名成功！\n'\
-                 + '==========\n'\
-                 + '  Player: ['+ str(len(player_list)) + ' / ' + str(MAX_PLAYER) +']'
+            hint = 'Bomb报名成功！\n'\
+                 + '=========\n'\
+                 + 'Player: ['+ str(len(player_list)) + ' / ' + str(MAX_PLAYER) +']'
             await bot.send(ev, hint)
 
 @sv.on_fullmatch('.bomb quit')
 async def bomb_quit(bot, ev):
     if ev.user_id in player_list:
         player_list.remove(ev.user_id)
-        hint = ' Bomb退出成功！\n'\
-             + '==========\n'\
-             + ' Player: ['+ str(len(player_list)) + ' / ' + str(MAX_PLAYER) +']'
+        hint = 'Bomb退出成功！\n'\
+             + '=========\n'\
+             + 'Player: ['+ str(len(player_list)) + ' / ' + str(MAX_PLAYER) +']'
         await bot.send(ev, hint)
         return
     else:
