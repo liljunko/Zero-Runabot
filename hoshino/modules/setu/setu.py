@@ -9,7 +9,7 @@ from hoshino.util import FreqLimiter, DailyNumberLimiter
 _max = 10
 EXCEED_NOTICE = f'您今天已经冲过{_max}次了，请明早5点后再来！'
 _nlmt = DailyNumberLimiter(_max)
-_flmt = FreqLimiter(5)
+_flmt = FreqLimiter(60)
 
 sv = Service('setu', manage_priv=priv.SUPERUSER, enable_on_default=True, visible=False)
 setu_folder = R.img('setu/').path
@@ -36,7 +36,8 @@ async def setu(bot, ev):
         await bot.send(ev, EXCEED_NOTICE, at_sender=True)
         return
     if not _flmt.check(uid):
-        await bot.send(ev, '您冲得太快了，请稍候再冲', at_sender=True)
+        nosese = R.img('nosese.gif').cqcode
+        await bot.send(ev, f'您冲得太快了，请稍候再冲\n{nosese}', at_sender=True)
         return
     _flmt.start_cd(uid)
     _nlmt.increase(uid)
