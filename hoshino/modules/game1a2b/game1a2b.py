@@ -1,8 +1,6 @@
 import re
 import random
 
-from pytz import country_names
-
 from hoshino import Service
 from hoshino.typing import CQEvent
 
