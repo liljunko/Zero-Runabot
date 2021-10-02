@@ -1,4 +1,4 @@
-# import re
+import re
 import random
 
 from hoshino import Service, util
@@ -33,9 +33,9 @@ def bomb_init():
     _max = 100
 
     init_hint = '【心跳~禁言数字炸弹】游戏开始\n'\
-              + '===================\n'\
+              + '=======================\n'\
               + 'Bomb已生成~【1】—>【100】\n'\
-              + '===================\n'\
+              + '=======================\n'\
               + '首先由[CQ:at,qq=' + str(player_list[0]) + ']猜数'
 
     return init_hint
@@ -72,18 +72,18 @@ def hint_update(guess):
     if guess > _min and guess < _bomb:
         _min = guess
         hint = 'Turn'+ str(_turn) +': \t\tM I S S\n'\
-             + '==============\n'\
+             + '===============\n'\
              + 'Hint: 【'+ str(_min) +'】—>【'+ str(_max) +'】\n'\
-             + '==============\n'\
+             + '===============\n'\
              + '轮到[CQ:at,qq=' + str(player_list[_current_player]) + ']猜数'
         return hint
     #大于Bomb
     if guess > _bomb and guess < _max:
         _max = guess
         hint = 'Turn'+ str(_turn) +': \t\tM I S S\n'\
-             + '==============\n'\
+             + '===============\n'\
              + 'Hint: 【'+ str(_min) +'】—>【'+ str(_max) +'】\n'\
-             + '==============\n'\
+             + '===============\n'\
              + '轮到[CQ:at,qq=' + str(player_list[_current_player]) + ']猜数'
         return hint
 
@@ -105,7 +105,7 @@ async def bomb_join(bot, ev):
             # global player_list
             player_list.append(ev.user_id)
             hint = 'Bomb报名成功！\n'\
-                 + '=========\n'\
+                 + '============\n'\
                  + 'Player: ['+ str(len(player_list)) + ' / ' + str(MAX_PLAYER) +']'
             await bot.send(ev, hint)
 
@@ -114,7 +114,7 @@ async def bomb_quit(bot, ev):
     if ev.user_id in player_list:
         player_list.remove(ev.user_id)
         hint = 'Bomb退出成功！\n'\
-             + '=========\n'\
+             + '============\n'\
              + 'Player: ['+ str(len(player_list)) + ' / ' + str(MAX_PLAYER) +']'
         await bot.send(ev, hint)
         return
@@ -137,7 +137,8 @@ async def bomb_start(bot, ev):
         await bot.send(ev, hint)
         # await bot.send(ev, str(_bomb))
 
-@sv.on_prefix('b')
+# @sv.on_prefix('b')
+@sv.on_rex(r'^b[\d]{1,2}$')
 async def bomb_guess(bot, ev):
     # await bot.send(ev, 'matched guess')
     if _is_bomb_start == False:
@@ -146,7 +147,7 @@ async def bomb_guess(bot, ev):
     if (ev.user_id not in player_list) or (ev.user_id != player_list[_current_player]):
         await bot.send(ev, '你未参加游戏，或尚未轮到你的回合')
         return
-    guess = int(ev.message.extract_plain_text().strip())
+    guess = int(ev.message.extract_plain_text().lstrip('b'))
     # await bot.send(ev, str(guess))
     if guess <= _min or guess >= _max:
         await bot.send(ev, '数字超出范围，请重新输入~')
@@ -155,9 +156,9 @@ async def bomb_guess(bot, ev):
         if _turn == 1:
             min = MAX_SILENCE_MINUTES
         bomb_hint = 'Boom————\t游戏结束\n'\
-                  + '=================\n'\
+                  + '===================\n'\
                   + 'Bomb—>【'+ str(_bomb) +'】<—Bomb\n'\
-                  + '=================\n'\
+                  + '===================\n'\
                   + '[CQ:at,qq='+ str(player_list[_current_player]) +']被禁言'+ str(min) +'分钟'
         game_reset()
         await bot.send(ev, bomb_hint)
