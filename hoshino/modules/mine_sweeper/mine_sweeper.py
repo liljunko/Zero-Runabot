@@ -334,7 +334,7 @@ async def mine_sweeper(bot, ev):
 		img.save(image.path)
 		msg = []
 		if ms.end_flag == LOSE :
-			await util.silence(ev, 60)
+			# await util.silence(ev, 60)
 			msg.append(f"很可惜，您踩到了地雷，游戏结束。\n最终结果：\n{image.cqcode}")
 		elif ms.end_flag == WIN:
 			msg.append(f"恭喜，你已成功找出所有地雷！\n最终结果：\n{image.cqcode}")
@@ -366,6 +366,8 @@ async def click_grid(bot, ev: CQEvent):
 	img.save(image.path)
 	if ret == WIN or ret == LOSE :
 		await bot.send(ev, f"游戏结束，请等待结算\n{image.cqcode}")
+		if ret == LOSE:
+			await util.silence(ev, 60, skip_su=False)
 	elif ret == NORMAL :
 		await bot.send(ev, image.cqcode)
 
